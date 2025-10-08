@@ -1,0 +1,19 @@
+Odd and even
+
+
+
+%{
+#include<stdio.h>
+int i;
+%}
+%%
+[0-9]*[02468] {printf("Even",yytext);}
+[0-9]*[13579] {printf("Odd",yytext);}
+%%
+void main(){
+printf("Enter the number:");
+yylex();
+}
+int yywrap(){
+return 1;
+}

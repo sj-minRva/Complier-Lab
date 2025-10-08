@@ -1,0 +1,23 @@
+valid email
+
+
+
+%{
+    // No C logic for validation, just printing matched patterns
+%}
+
+EMAIL     [a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}
+
+%%
+{EMAIL}     { printf("%s is a valid email address\n", yytext); }
+.|\n        ;  // Ignore everything else
+%%
+
+int main() {
+    yylex();
+    return 0;
+}
+
+int yywrap() {
+    return 1;
+}
