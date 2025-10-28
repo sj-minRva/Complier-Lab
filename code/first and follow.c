@@ -1,6 +1,3 @@
-
-
-
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -51,25 +48,30 @@ void addToSet(char arr[], int *size, char c) {
     }
 }
 
-void addFirst(char c, int idx);
 
 void computeFirst(int idx) {
     // idx = index of non-terminal
-    for (int r = 0; r < ruleCount; r++) {
-        if (productionHeads[r] == nonTerminals[idx]) {
+    for (int r = 0; r < ruleCount; r++) 
+    {
+        if (productionHeads[r] == nonTerminals[idx]) 
+        {
             char *prod = productions[r];
             if (prod[0] == '@') { // epsilon
                 addToSet(first[idx], &firstCount[idx], '@');
             } else {
-                for (int i = 0; prod[i] != '\0'; i++) {
-                    if (!isNonTerminal(prod[i])) {
+                for (int i = 0; prod[i] != '\0'; i++) 
+                {
+                    if (!isNonTerminal(prod[i])) 
+                    {
                         addToSet(first[idx], &firstCount[idx], prod[i]);
                         break;
-                    } else {
+                    } else 
+                    {
                         int ntIndex = getNonTerminalIndex(prod[i]);
                         if (ntIndex == -1) break;
                         // Recursive call if first set not computed yet
-                        if (firstCount[ntIndex] == 0) {
+                        if (firstCount[ntIndex] == 0) 
+                        {
                             computeFirst(ntIndex);
                         }
                         for (int j = 0; j < firstCount[ntIndex]; j++) {
@@ -109,7 +111,8 @@ void computeFollow(int startIdx) {
 
                     // Look ahead symbols after prod[i]
                     int foundEpsilon = 1;
-                    for (int j = i + 1; j < len && foundEpsilon; j++) {
+                    for (int j = i + 1; j < len && foundEpsilon; j++) 
+                    {
                         foundEpsilon = 0;
                         if (!isNonTerminal(prod[j])) {
                             addToSet(follow[currIdx], &followCount[currIdx], prod[j]);
