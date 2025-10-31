@@ -9,10 +9,13 @@ void FIRST(char c, int first[]);
 void FOLLOW(char c, int follow[]);
 
 int main() {
-    int i, ch;
+    int i, cont;
+    char ch;
+
     printf("Enter number of productions: ");
     scanf("%d", &n);
-    printf("Enter productions (E=TX format):\n");
+
+    printf("Enter productions (use -> for production and $ for epsilon):\n");
     for (i = 0; i < n; i++)
         scanf("%s", prod[i]);
 
@@ -36,20 +39,25 @@ int main() {
         printf("}\n");
 
         printf("Continue? (1/0): ");
-        scanf("%d", &i);
-    } while (i == 1);
+        scanf("%d", &cont);
+    } while (cont == 1);
 
     return 0;
 }
 
 void FIRST(char c, int first[]) {
-    if (!isupper(c)) { first[c] = 1; return; }
+    if (!isupper(c)) {
+        first[c] = 1;
+        return;
+    }
+
     for (int i = 0; i < n; i++) {
         if (prod[i][0] == c) {
-            if (prod[i][2] == '$')
+            if (prod[i][3] == '$')
                 first['$'] = 1;
-            else
-                FIRST(prod[i][2], first);
+            else {
+                FIRST(prod[i][3], first);
+            }
         }
     }
 }
@@ -60,18 +68,21 @@ void FOLLOW(char c, int follow[]) {
 
     for (int i = 0; i < n; i++) {
         int len = strlen(prod[i]);
-        for (int j = 2; j < len; j++) {
+        for (int j = 3; j < len; j++) {
             if (prod[i][j] == c) {
                 if (prod[i][j + 1] != '\0') {
                     int firstNext[256] = {0};
                     FIRST(prod[i][j + 1], firstNext);
+
                     for (int k = 0; k < 256; k++)
                         if (firstNext[k] && k != '$')
                             follow[k] = 1;
+
                     if (firstNext['$'])
                         FOLLOW(prod[i][0], follow);
-                } else if (prod[i][0] != c)
+                } else if (prod[i][0] != c) {
                     FOLLOW(prod[i][0], follow);
+                }
             }
         }
     }
